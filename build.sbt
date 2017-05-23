@@ -14,13 +14,14 @@ docker <<= (docker in bfg) map {(image) => image}
 //Set the image creation Task to be the one used by sbt-docker
 dockerImageCreationTask := docker.value
 
-
 lazy val bfg = project
   .settings(
     name := "bfg",
     Defaults.itSettings,
     commonSettings,
     libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.0.5",
+    composeFile :=  s"${baseDirectory.value.absolutePath}/../docker/docker-compose.yml",
+    dockerImageCreationTask := docker.value,
     //To use 'dockerComposeTest' to run tests in the 'IntegrationTest' scope instead of the default 'Test' scope:
     // 1) Package the tests that exist in the IntegrationTest scope
     testCasesPackageTask := (sbt.Keys.packageBin in IntegrationTest).value,
